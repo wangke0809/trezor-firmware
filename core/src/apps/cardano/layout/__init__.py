@@ -1,6 +1,7 @@
 from micropython import const
 
 from trezor import ui
+from trezor.messages import ButtonRequestType
 from trezor.strings import format_amount
 from trezor.ui.scroll import Paginated
 from trezor.ui.text import Text
@@ -32,7 +33,7 @@ async def confirm_sending(ctx, amount, to):
                 t.bold(line)
             pages.append(t)
 
-    return await confirm(ctx, Paginated(pages))
+    return await confirm(ctx, Paginated(pages), code=ButtonRequestType.SignTx)
 
 
 async def confirm_transaction(ctx, amount, fee, network_name):
@@ -46,4 +47,6 @@ async def confirm_transaction(ctx, amount, fee, network_name):
     t2.normal("Network:")
     t2.bold(network_name)
 
-    return await hold_to_confirm(ctx, Paginated([t1, t2]))
+    return await hold_to_confirm(
+        ctx, Paginated([t1, t2]), code=ButtonRequestType.SignTx
+    )

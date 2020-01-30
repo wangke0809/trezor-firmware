@@ -1,4 +1,5 @@
 from trezor import ui, wire
+from trezor.messages import ButtonRequestType
 from trezor.messages.Success import Success
 from trezor.messages.WebAuthnAddResidentCredential import WebAuthnAddResidentCredential
 from trezor.ui.text import Text
@@ -44,11 +45,13 @@ async def add_resident_credential(
             "not belong to this",
             "authenticator.",
         )
-        await require_confirm(ctx, text, confirm=None, cancel="Close")
+        await require_confirm(
+            ctx, text, confirm=None, cancel="Close", code=ButtonRequestType.WebAuthn
+        )
         raise wire.ActionCancelled("Cancelled") from None
 
     content = ConfirmContent(ConfirmAddCredential(cred))
-    await require_confirm(ctx, content)
+    await require_confirm(ctx, content, code=ButtonRequestType.WebAuthn)
 
     if store_resident_credential(cred):
         return Success(message="Credential added")

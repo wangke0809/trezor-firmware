@@ -1,6 +1,7 @@
 import storage.sd_salt
 from storage.sd_salt import SD_CARD_HOT_SWAPPABLE
 from trezor import io, ui, wire
+from trezor.messages import ButtonRequestType
 from trezor.ui.text import Text
 
 from apps.common.confirm import confirm
@@ -26,7 +27,13 @@ async def _wrong_card_dialog(ctx: wire.GenericContext) -> bool:
         btn_confirm = None
         btn_cancel = "Close"
 
-    return await confirm(ctx, text, confirm=btn_confirm, cancel=btn_cancel)
+    return await confirm(
+        ctx,
+        text,
+        confirm=btn_confirm,
+        cancel=btn_cancel,
+        code=ButtonRequestType.SdProtectWrongCard,
+    )
 
 
 async def insert_card_dialog(ctx: wire.GenericContext) -> bool:
@@ -42,13 +49,25 @@ async def insert_card_dialog(ctx: wire.GenericContext) -> bool:
         btn_confirm = None
         btn_cancel = "Close"
 
-    return await confirm(ctx, text, confirm=btn_confirm, cancel=btn_cancel)
+    return await confirm(
+        ctx,
+        text,
+        confirm=btn_confirm,
+        cancel=btn_cancel,
+        code=ButtonRequestType.SdProtectInsertCard,
+    )
 
 
 async def sd_problem_dialog(ctx: wire.GenericContext) -> bool:
     text = Text("SD card protection", ui.ICON_WRONG, ui.RED)
     text.normal("There was a problem", "accessing the SD card.")
-    return await confirm(ctx, text, confirm="Retry", cancel="Abort")
+    return await confirm(
+        ctx,
+        text,
+        confirm="Retry",
+        cancel="Abort",
+        code=ButtonRequestType.SdProtectCardError,
+    )
 
 
 async def ensure_sd_card(ctx: wire.GenericContext) -> None:

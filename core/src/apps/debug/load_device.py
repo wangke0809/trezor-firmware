@@ -2,7 +2,7 @@ import storage
 import storage.device
 from trezor import config, wire
 from trezor.crypto import bip39, slip39
-from trezor.messages import BackupType
+from trezor.messages import BackupType, ButtonRequestType
 from trezor.messages.Success import Success
 from trezor.pin import pin_to_int
 from trezor.ui.text import Text
@@ -74,4 +74,4 @@ async def _warn(ctx: wire.Context):
     text = Text("Loading seed")
     text.bold("Loading private seed", "is not recommended.")
     text.normal("Continue only if you", "know what you are doing!")
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.Warning)

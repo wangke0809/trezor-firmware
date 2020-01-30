@@ -120,7 +120,12 @@ async def show_remaining_shares(
             for word in group:
                 text.normal(word)
             pages.append(text)
-    await confirm(ctx, Paginated(pages), cancel=None)
+    await confirm(
+        ctx,
+        Paginated(pages),
+        cancel=None,
+        code=ButtonRequestType.RecoverySlip39RemainingInfo,
+    )
 
 
 async def show_group_share_success(
@@ -132,7 +137,13 @@ async def show_group_share_success(
     text.normal("from")
     text.bold("Group %s" % (group_index + 1))
 
-    await confirm(ctx, text, confirm="Continue", cancel=None)
+    await confirm(
+        ctx,
+        text,
+        confirm="Continue",
+        cancel=None,
+        code=ButtonRequestType.RecoverySlip39ShareEntered,
+    )
 
 
 async def show_dry_run_result(

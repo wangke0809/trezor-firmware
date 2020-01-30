@@ -1,6 +1,7 @@
 from trezor import wire
 from trezor.crypto import aes, hmac
 from trezor.crypto.hashlib import sha512
+from trezor.messages import ButtonRequestType
 from trezor.messages.CipheredKeyValue import CipheredKeyValue
 from trezor.ui.text import Text
 
@@ -20,7 +21,7 @@ async def cipher_key_value(ctx, msg, keychain):
             title = "Decrypt value"
         text = Text(title)
         text.normal(msg.key)
-        await require_confirm(ctx, text)
+        await require_confirm(ctx, text, ButtonRequestType.CipherKeyValue)
 
     node = keychain.derive(msg.address_n)
     value = compute_cipher_key_value(msg, node.private_key())

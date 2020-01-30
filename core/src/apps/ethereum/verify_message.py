@@ -1,6 +1,7 @@
 from trezor import wire
 from trezor.crypto.curve import secp256k1
 from trezor.crypto.hashlib import sha3_256
+from trezor.messages import ButtonRequestType
 from trezor.messages.Success import Success
 from trezor.ui.text import Text
 
@@ -38,8 +39,8 @@ async def verify_message(ctx, msg):
 async def require_confirm_verify_message(ctx, address, message):
     text = Text("Confirm address", new_lines=False)
     text.mono(*split_address(address))
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.Address)
 
     text = Text("Verify message", new_lines=False)
     text.mono(*split_message(message))
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.VerifyMessage)

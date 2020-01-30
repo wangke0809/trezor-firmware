@@ -1,5 +1,6 @@
 from storage import is_initialized
 from trezor import config, ui, wire
+from trezor.messages import ButtonRequestType
 from trezor.messages.Success import Success
 from trezor.pin import pin_to_int
 from trezor.ui.popup import Popup
@@ -67,19 +68,19 @@ def _require_confirm_action(
         text.normal("Do you really want to")
         text.bold("disable wipe code")
         text.bold("protection?")
-        return require_confirm(ctx, text)
+        return require_confirm(ctx, text, code=ButtonRequestType.WipeCodeDisable)
 
     if not msg.remove and has_wipe_code:
         text = Text("Change wipe code", ui.ICON_CONFIG)
         text.normal("Do you really want to")
         text.bold("change the wipe code?")
-        return require_confirm(ctx, text)
+        return require_confirm(ctx, text, code=ButtonRequestType.WipeCodeChange)
 
     if not msg.remove and not has_wipe_code:
         text = Text("Set wipe code", ui.ICON_CONFIG)
         text.normal("Do you really want to")
         text.bold("set the wipe code?")
-        return require_confirm(ctx, text)
+        return require_confirm(ctx, text, code=ButtonRequestType.WipeCodeEnable)
 
     # Removing non-existing wipe code.
     raise wire.ProcessError("Wipe code protection is already disabled")

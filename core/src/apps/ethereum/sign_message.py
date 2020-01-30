@@ -1,5 +1,6 @@
 from trezor.crypto.curve import secp256k1
 from trezor.crypto.hashlib import sha3_256
+from trezor.messages import ButtonRequestType
 from trezor.messages.EthereumMessageSignature import EthereumMessageSignature
 from trezor.ui.text import Text
 from trezor.utils import HashWriter
@@ -43,4 +44,4 @@ async def require_confirm_sign_message(ctx, message):
     message = split_message(message)
     text = Text("Sign ETH message", new_lines=False)
     text.normal(*message)
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.SignMessage)

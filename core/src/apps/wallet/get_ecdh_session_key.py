@@ -1,6 +1,7 @@
 from ustruct import pack, unpack
 
 from trezor.crypto.hashlib import sha256
+from trezor.messages import ButtonRequestType
 from trezor.messages.ECDHSessionKey import ECDHSessionKey
 from trezor.ui.text import Text
 from trezor.utils import chunks
@@ -37,7 +38,7 @@ async def require_confirm_ecdh_session_key(ctx, identity):
     proto = identity.proto.upper() if identity.proto else "identity"
     text = Text("Decrypt %s" % proto)
     text.mono(*lines)
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.EcdhSessionKey)
 
 
 def get_ecdh_path(identity: str, index: int):

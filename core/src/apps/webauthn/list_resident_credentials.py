@@ -1,4 +1,5 @@
 from trezor import wire
+from trezor.messages import ButtonRequestType
 from trezor.messages.WebAuthnCredential import WebAuthnCredential
 from trezor.messages.WebAuthnCredentials import WebAuthnCredentials
 from trezor.messages.WebAuthnListResidentCredentials import (
@@ -20,7 +21,7 @@ async def list_resident_credentials(
         "resident credentials",
         "stored on this device?",
     )
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.WebAuthn)
     creds = [
         WebAuthnCredential(
             index=cred.index,

@@ -1,5 +1,6 @@
 from trezor import wire
 from trezor.crypto.curve import secp256k1
+from trezor.messages import ButtonRequestType
 from trezor.messages.InputScriptType import SPENDADDRESS, SPENDP2SHWITNESS, SPENDWITNESS
 from trezor.messages.MessageSignature import MessageSignature
 from trezor.ui.text import Text
@@ -53,4 +54,4 @@ async def require_confirm_sign_message(ctx, message):
     message = split_message(message)
     text = Text("Sign message", new_lines=False)
     text.normal(*message)
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.SignMessage)

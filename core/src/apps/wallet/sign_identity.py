@@ -2,6 +2,7 @@ from ustruct import pack, unpack
 
 from trezor import ui
 from trezor.crypto.hashlib import sha256
+from trezor.messages import ButtonRequestType
 from trezor.messages.SignedIdentity import SignedIdentity
 from trezor.ui.text import Text
 from trezor.utils import chunks
@@ -78,7 +79,7 @@ async def require_confirm_sign_identity(ctx, identity, challenge_visual):
     proto = identity.proto.upper() if identity.proto else "identity"
     text = Text("Sign %s" % proto)
     text.normal(*lines)
-    await require_confirm(ctx, text)
+    await require_confirm(ctx, text, code=ButtonRequestType.SignIdentity)
 
 
 def serialize_identity(identity):

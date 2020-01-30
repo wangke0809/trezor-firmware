@@ -51,7 +51,7 @@ async def request_pin(
 
 async def request_pin_ack(ctx: wire.Context, *args: Any, **kwargs: Any) -> str:
     try:
-        await ctx.call(ButtonRequest(code=ButtonRequestType.Other), ButtonAck)
+        await ctx.call(ButtonRequest(code=ButtonRequestType.PinRequest), ButtonAck)
         pin = await ctx.wait(request_pin(*args, **kwargs))
         assert isinstance(pin, str)
         return pin
@@ -116,7 +116,9 @@ async def show_pin_invalid(ctx: wire.Context) -> None:
 
     text = Text("Wrong PIN", ui.ICON_WRONG, ui.RED)
     text.normal("The PIN you entered is", "invalid.")
-    await confirm(ctx, text, confirm=None, cancel="Close")
+    await confirm(
+        ctx, text, confirm=None, cancel="Close", code=ButtonRequestType.PinIncorrect
+    )
 
 
 async def show_pin_matches_wipe_code(ctx: wire.Context) -> None:
@@ -124,4 +126,6 @@ async def show_pin_matches_wipe_code(ctx: wire.Context) -> None:
 
     text = Text("Invalid PIN", ui.ICON_WRONG, ui.RED)
     text.normal("The new PIN must be", "different from your", "wipe code.")
-    await confirm(ctx, text, confirm=None, cancel="Close")
+    await confirm(
+        ctx, text, confirm=None, cancel="Close", code=ButtonRequestType.PinIncorrect
+    )

@@ -1,5 +1,6 @@
 from storage import is_initialized
 from trezor import config, ui, wire
+from trezor.messages import ButtonRequestType
 from trezor.messages.Success import Success
 from trezor.pin import pin_to_int
 from trezor.ui.text import Text
@@ -69,19 +70,19 @@ def require_confirm_change_pin(ctx: wire.Context, msg: ChangePin) -> None:
         text = Text("Remove PIN", ui.ICON_CONFIG)
         text.normal("Do you really want to")
         text.bold("disable PIN protection?")
-        return require_confirm(ctx, text)
+        return require_confirm(ctx, text, code=ButtonRequestType.PinDisable)
 
     if not msg.remove and has_pin:  # changing pin
         text = Text("Change PIN", ui.ICON_CONFIG)
         text.normal("Do you really want to")
         text.bold("change your PIN?")
-        return require_confirm(ctx, text)
+        return require_confirm(ctx, text, code=ButtonRequestType.PinChange)
 
     if not msg.remove and not has_pin:  # setting new pin
         text = Text("Enable PIN", ui.ICON_CONFIG)
         text.normal("Do you really want to")
         text.bold("enable PIN protection?")
-        return require_confirm(ctx, text)
+        return require_confirm(ctx, text, code=ButtonRequestType.PinEnable)
 
     # removing non-existing PIN
     raise wire.ProcessError("PIN protection already disabled")

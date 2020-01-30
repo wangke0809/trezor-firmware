@@ -1,5 +1,6 @@
 import storage.resident_credentials
 from trezor import wire
+from trezor.messages import ButtonRequestType
 from trezor.messages.Success import Success
 from trezor.messages.WebAuthnRemoveResidentCredential import (
     WebAuthnRemoveResidentCredential,
@@ -40,7 +41,7 @@ async def remove_resident_credential(
         raise wire.ProcessError("Invalid credential index.")
 
     content = ConfirmContent(ConfirmRemoveCredential(cred))
-    await require_confirm(ctx, content)
+    await require_confirm(ctx, content, code=ButtonRequestType.WebAuthn)
 
     assert cred.index is not None
     storage.resident_credentials.delete(cred.index)
