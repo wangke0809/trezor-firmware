@@ -119,6 +119,7 @@ def store_mnemonic_secret(
     common.set(_NAMESPACE, _MNEMONIC_SECRET, secret)
     common.set_uint8(_NAMESPACE, _BACKUP_TYPE, backup_type)
     common.set_true_or_delete(_NAMESPACE, _NO_BACKUP, no_backup)
+    common.delete(_NAMESPACE, _UNFINISHED_BACKUP)
     if not no_backup:
         common.set_true_or_delete(_NAMESPACE, _NEEDS_BACKUP, needs_backup)
 
